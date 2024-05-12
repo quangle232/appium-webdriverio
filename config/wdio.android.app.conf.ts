@@ -1,4 +1,3 @@
-import { join } from 'path';
 import config from './wdio.shared.local.appium.conf';
 
 // ============
@@ -21,11 +20,11 @@ config.capabilities = [
         // For W3C the appium capabilities need to have an extension prefix
         // http://appium.io/docs/en/writing-running-appium/caps/
         // This is `appium:` for all Appium Capabilities which can be found here
-        'appium:deviceName': 'POS_Tablet',
-        'appium:platformVersion': '9.0',
+        'appium:deviceName': 'Pixel_7_Pro',
+        'appium:platformVersion': '14.0',
         'appium:automationName': 'UiAutomator2',
         // The path to the app
-        'appium:app': './apps/android/app-release.apk',
+        'appium:app': './apps/android/chrome_test_app.apk',
         // @ts-ignore
         'appium:newCommandTimeout': 240,
     },

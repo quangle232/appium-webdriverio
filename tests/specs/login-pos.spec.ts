@@ -1,6 +1,7 @@
-describe('Should be able to login', () => {
+describe('Search feature', () => {
 
-    it('should login successfully with staging account @smoke @pos @account_03', async () => {
+    it('should be able to search for Elfie on google', async () => {
+        await driver.url('https://www.google.com');
     });
 
 });
