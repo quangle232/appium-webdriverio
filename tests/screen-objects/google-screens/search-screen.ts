@@ -1,11 +1,11 @@
-import { BaseScreen } from '../base/BaseScreen';
+import { GoogleScreen } from './google-screen';
 
-export class SearchScreen extends BaseScreen {
+export class GoogleSearchScreen extends GoogleScreen {
     constructor() {
         super();
     }
 
-    async getsearchTextAreaElements() {
+    async getSearchTextAreaElements() {
         const searchTextAreaElementsIOS = {
             searchTextArea: ''
         };
@@ -15,15 +15,15 @@ export class SearchScreen extends BaseScreen {
         const searchTextAreaElementsWeb = {
             searchTextArea: '//textarea[@aria-describedby]'
         };
-        let headerElements  = driver.isAndroid ? searchTextAreaElementsAndroid : searchTextAreaElementsIOS;
+        let searchTextAreaElements  = driver.isAndroid ? searchTextAreaElementsAndroid : searchTextAreaElementsIOS;
         if (await this.webViewCheck()){
-            headerElements = searchTextAreaElementsWeb;
+            searchTextAreaElements = searchTextAreaElementsWeb;
         }
-        return headerElements;
+        return searchTextAreaElements;
     }
 
     async searchWithText(text: string){
-        await this.waitAndFill((await this.getsearchTextAreaElements()).searchTextArea, text);
+        await this.waitAndFill((await this.getSearchTextAreaElements()).searchTextArea, text);
         await this.pressEnter();
     }
 }

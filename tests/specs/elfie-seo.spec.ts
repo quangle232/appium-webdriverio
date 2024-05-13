@@ -1,12 +1,30 @@
-import { SearchScreen } from '../screen-objects/chrome-screen/search-screen';
+import { ElfieHomeScreen } from '../screen-objects/elfie-screens/home-screen';
+import { GoogleSearchResultsScreen } from '../screen-objects/google-screens/search-result-screen';
+import { GoogleSearchScreen } from '../screen-objects/google-screens/search-screen';
 
 describe('Elfie SEO', () => {
 
-    it('should be able to search for Elfie on google', async () => {
-        const searchScreen = new SearchScreen();
+    const googleSearchScreen = new GoogleSearchScreen();
+    const googleSearchResultScreen = new GoogleSearchResultsScreen();
+    const elfieHomeScreen = new ElfieHomeScreen();
+
+    it('should be able to search for Elfie on google and access to Elfie website on top of search result list', async () => {
         await driver.url('/');
-        await searchScreen.searchWithText('Elfie');
-        await driver.pause(10000);
+        await googleSearchScreen.searchWithText('Elfie');
+        await googleSearchResultScreen.selectResultByIndex(0);
+        await driver.takeScreenshot();
+        await elfieHomeScreen.verifyElfieLogoDisplay();
+    });
+
+    it('should be able to open and close menu button', async () => {
+        await elfieHomeScreen.openMenu();
+        await driver.takeScreenshot();
+        await elfieHomeScreen.verifyCloseButtonDisplay();
+    });
+
+    it('should display correct content for copy right', async () => {
+        await elfieHomeScreen.closeMenu();
+        await elfieHomeScreen.verifyBottomCopyRightContent();
     });
 
 });

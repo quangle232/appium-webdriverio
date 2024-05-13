@@ -7,10 +7,12 @@ export class BaseScreen {
         this.automationType = this.getAutomationType();
     }
 
+    /* ============ Methods =============== */
+
     getAutomationType(){
         return driver.isAndroid? 'android' : 'ios class chain';
     }
-    /* ============ Methods =============== */
+
     async pressKeyBoard(keyName: string) {
         await browser.keys(keyName);
     }
@@ -176,6 +178,13 @@ export class BaseScreen {
         return element.isDisplayed();
     }
 
+    async takeScreenshot(){
+        await this.takeScreenshot();
+    }
+
+    async scrollToElement(locator: string){
+        (await driver.$(locator)).scrollIntoView();
+    }
     /*==================Verification==============*/
     async checkExist(locator: string) {
         let _locator;

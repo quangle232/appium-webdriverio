@@ -24,7 +24,7 @@ config.capabilities = [
         'appium:orientation': 'LANDSCAPE',
         'appium:automationName': 'XCUITest',
         // The path to the app
-        'appium:app': join(process.cwd(), 'apps/ios/simulator/POSApp.zip'),
+        'appium:app': join(process.cwd(), 'file-path'),
         'appium:newCommandTimeout': 240,
         'appium:noReset': true,
     },
