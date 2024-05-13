@@ -16,6 +16,8 @@ pipeline {
     stage('Installing Package') {
       steps {
         sh 'npm install -g android-platform-tools'
+        sh 'export ANDROID_HOME ~/Library/Android/sdk'
+        sh 'export PATH $PATH:$ANDROID_HOME/tools:$ANDROID_HOME/tools/bin:$ANDROID_HOME/platform-tools'
         sh 'npm install -g appium'
         sh 'npm install'
       }
