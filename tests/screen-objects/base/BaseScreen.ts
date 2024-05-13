@@ -1,15 +1,41 @@
+import { KEY_CODE_ENTER, KEY_CODE_SEARCH } from '../../../helper/key-code';
+import WebView, { CONTEXT_REF } from '../../../helper/web-view';
 export class BaseScreen {
+    automationType: string;
+
     constructor() {
+        this.automationType = this.getAutomationType();
     }
 
+    getAutomationType(){
+        return driver.isAndroid? 'android' : 'ios class chain';
+    }
     /* ============ Methods =============== */
     async pressKeyBoard(keyName: string) {
         await browser.keys(keyName);
     }
 
-    async getAttributeValue(locator: string, attribute: string, type = 'ios class chain') {
+    async pressEnter(){
+        await driver.pressKeyCode(KEY_CODE_ENTER);
+    }
+
+    async pressSearchKey(){
+        await driver.pressKeyCode(KEY_CODE_SEARCH);
+    }
+
+    async webViewCheck(){
+        const webView = new WebView();
+        await webView.waitForWebViewContextLoaded();
+        const currentContexts = await webView.getCurrentContexts();
+        if (currentContexts.find(context => context.toLowerCase().includes(CONTEXT_REF.WEBVIEW)) !== 'undefined') {
+            return true;
+        }
+        return false;
+    }
+
+    async getAttributeValue(locator: string, attribute: string) {
         let element;
-        if (type == 'ios class chain') {
+        if (this.automationType == 'ios class chain') {
             element = await $(`-ios class chain:${locator}`);
         } else {
             element = await $(locator);
@@ -18,35 +44,35 @@ export class BaseScreen {
         return attributeValue;
     }
 
-    async getColor(locator: string, type = 'ios class chain') {
-        const actualColor = await this.getAttributeValue(locator, 'color', type);
+    async getColor(locator: string) {
+        const actualColor = await this.getAttributeValue(locator, 'color');
         return actualColor;
     }
 
-    async getBackGroundColor(locator: string, type = 'ios class chain') {
-        const actualColor = await this.getAttributeValue(locator, 'background-color', type);
+    async getBackGroundColor(locator: string) {
+        const actualColor = await this.getAttributeValue(locator, 'background-color');
         return actualColor;
     }
 
-    async getBorderColor(locator: string, type = 'ios class chain') {
-        const actualColor = await this.getAttributeValue(locator, 'border-color', type);
+    async getBorderColor(locator: string) {
+        const actualColor = await this.getAttributeValue(locator, 'border-color');
         return actualColor;
     }
 
-    async waitAndClick(locator: string, type = 'ios class chain') {
+    async waitAndClick(locator: string) {
         let element;
-        if (type == 'ios class chain') {
+        if (this.automationType == 'ios class chain') {
             element = await $(`-ios class chain:${locator}`);
         } else {
             element = await $(locator);
         }
         await element.click();
-        await browser.pause(1000);
+        await driver.pause(1000);
     }
 
-    async waitAndFill(locator: string, value: string, type = 'ios class chain') {
+    async waitAndFill(locator: string, value: string) {
         let element;
-        if (type == 'ios class chain') {
+        if (this.automationType == 'ios class chain') {
             element = await $(`-ios class chain:${locator}`);
         } else {
             element = await $(locator);
@@ -55,48 +81,48 @@ export class BaseScreen {
         await element.setValue(value);
         // const arrValue = [...value]; // This is for converting string to charArray
         // for (let i = 0; i < arrValue.length; i++) {
-        //     browser.keys(arrValue[i]);
-        //     browser.pause(200);
+        //     driver.keys(arrValue[i]);
+        //     driver.pause(200);
         // }
-        await browser.pause(1000);
+        await driver.pause(1000);
     }
 
-    async waitAndSelectByValue(locator: string, value: string, type = 'ios class chain') {
+    async waitAndSelectByValue(locator: string, value: string) {
         let element;
-        if (type == 'ios class chain') {
+        if (this.automationType == 'ios class chain') {
             element = await $(`-ios class chain:${locator}`);
         } else {
             element = await $(locator);
         }
         await element.selectByAttribute('value', value);
-        await browser.pause(1000);
+        await driver.pause(1000);
     }
 
-    async waitAndSelectByLabel(locator: string, value: string, type = 'ios class chain') {
+    async waitAndSelectByLabel(locator: string, value: string) {
         let element;
-        if (type == 'ios class chain') {
+        if (this.automationType == 'ios class chain') {
             element = await $(`-ios class chain:${locator}`);
         } else {
             element = await $(locator);
         }
         await element.selectByVisibleText(value);
-        await browser.pause(1000);
+        await driver.pause(1000);
     }
 
-    async waitAndSelectByIndex(locator: string, value: number, type = 'ios class chain') {
+    async waitAndSelectByIndex(locator: string, value: number) {
         let element;
-        if (type == 'ios class chain') {
+        if (this.automationType == 'ios class chain') {
             element = await $(`-ios class chain:${locator}`);
         } else {
             element = await $(locator);
         }
         await element.selectByIndex(value);
-        await browser.pause(1000);
+        await driver.pause(1000);
     }
 
-    async waitAndGetText(locator: string, type = 'ios class chain') {
+    async waitAndGetText(locator: string) {
         let element;
-        if (type == 'ios class chain') {
+        if (this.automationType == 'ios class chain') {
             element = await $(`-ios class chain:${locator}`);
         } else {
             element = await $(locator);
@@ -105,22 +131,22 @@ export class BaseScreen {
         return elementText;
     }
 
-    async clickIfElementDisplay(locator: string, type = 'ios class chain') {
+    async clickIfElementDisplay(locator: string) {
         let element;
-        if (type == 'ios class chain') {
+        if (this.automationType == 'ios class chain') {
             element = await $(`-ios class chain:${locator}`);
         } else {
             element = await $(locator);
         }
         if (await element.isDisplayed()) {
             await element.click();
-            await browser.pause(1000);
+            await driver.pause(1000);
         }
     }
 
-    async clickElementByCoordinates(locator: string, type = 'ios class chain') {
+    async clickElementByCoordinates(locator: string) {
         let element;
-        if (type == 'ios class chain') {
+        if (this.automationType == 'ios class chain') {
             element = await $(`-ios class chain:${locator}`);
         } else {
             element = await $(locator);
@@ -131,18 +157,18 @@ export class BaseScreen {
         const startY = await element.getLocation('y');
         const additionY = await element.getSize('height') * 0.5;
         const endY = startY + additionY;
-        await browser.touchAction({ action: 'tap', x: endX, y: endY });
+        await driver.touchAction({ action: 'tap', x: endX, y: endY });
     }
 
     async clickOnCenterOfScreen() {
-        const windowHeight = (await browser.getWindowSize()).height;
-        const windowWidth = (await browser.getWindowSize()).width;
-        await browser.touchAction({ action: 'tap', x: windowWidth / 2, y: windowHeight / 2 + 150 });
+        const windowHeight = (await driver.getWindowSize()).height;
+        const windowWidth = (await driver.getWindowSize()).width;
+        await driver.touchAction({ action: 'tap', x: windowWidth / 2, y: windowHeight / 2 + 150 });
     }
 
-    async isElementDisplayed(locator: string, type = 'ios class chain') {
+    async isElementDisplayed(locator: string) {
         let element;
-        if (type == 'ios class chain') {
+        if (this.automationType == 'ios class chain') {
             element = await $(`-ios class chain:${locator}`);
         } else {
             element = await $(locator);
@@ -151,9 +177,9 @@ export class BaseScreen {
     }
 
     /*==================Verification==============*/
-    async checkExist(locator: string, type = 'ios class chain') {
+    async checkExist(locator: string) {
         let _locator;
-        if (type == 'ios class chain') {
+        if (this.automationType == 'ios class chain') {
             _locator = `-ios class chain:${locator}`;
         } else {
             _locator = locator;
@@ -161,9 +187,9 @@ export class BaseScreen {
         return !!(await $$(_locator)).length;
     }
 
-    async verifyTextContent(locator: string, text: string, type = 'ios class chain') {
+    async verifyTextContent(locator: string, text: string) {
         let element;
-        if (type == 'ios class chain') {
+        if (this.automationType == 'ios class chain') {
             element = await $(`-ios class chain:${locator}`);
         } else {
             element = await $(locator);
@@ -171,9 +197,9 @@ export class BaseScreen {
         await expect(element).toHaveTextContaining(text);
     }
 
-    async verifyValueContent(locator: string, text: string, type = 'ios class chain') {
+    async verifyValueContent(locator: string, text: string) {
         let element;
-        if (type == 'ios class chain') {
+        if (this.automationType == 'ios class chain') {
             element = await $(`-ios class chain:${locator}`);
         } else {
             element = await $(locator);
@@ -182,9 +208,9 @@ export class BaseScreen {
         expect(value).toContain(text);
     }
 
-    async verifyElementVisible(locator: string, type = 'ios class chain') {
+    async verifyElementVisible(locator: string) {
         let element;
-        if (type == 'ios class chain') {
+        if (this.automationType == 'ios class chain') {
             element = await $(`-ios class chain:${locator}`);
         } else {
             element = await $(locator);
@@ -192,9 +218,9 @@ export class BaseScreen {
         await expect(element).toBeDisplayed();
     }
 
-    async verifyElementNotVisible(locator: string, type = 'ios class chain') {
+    async verifyElementNotVisible(locator: string) {
         let element;
-        if (type == 'ios class chain') {
+        if (this.automationType == 'ios class chain') {
             element = await $(`-ios class chain:${locator}`);
         } else {
             element = await $(locator);
@@ -202,13 +228,14 @@ export class BaseScreen {
         await expect(element).not.toBeDisplayed();
     }
 
-    async verifyElementDisabled(locator: string, type = 'ios class chain') {
+    async verifyElementDisabled(locator: string) {
         let element;
-        if (type == 'ios class chain') {
+        if (this.automationType == 'ios class chain') {
             element = await $(`-ios class chain:${locator}`);
         } else {
             element = await $(locator);
         }
         await expect(element).toBeDisabled();
     }
+
 }
