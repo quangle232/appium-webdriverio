@@ -1,4 +1,5 @@
 import { ElfieScreen } from './elfie-screen';
+import { copyRight } from '../../../test-data/copy-right-content';
 
 export class ElfieHomeScreen extends ElfieScreen {
     constructor() {
@@ -7,16 +8,19 @@ export class ElfieHomeScreen extends ElfieScreen {
 
     async getHomeScreenElements() {
         const homePageElementsIOS = {
+            acceptCookiesBtn: '',
             hamburgerBtn: '',
             elfieLogo: '',
             copyRightLabel: '',
         };
         const homePageElementsAndroid = {
+            acceptCookiesBtn: '',
             hamburgerBtn: '',
             elfieLogo: '',
             copyRightLabel: '',
         };
         const homePageElementsWeb = {
+            acceptCookiesBtn: '[data-cky-tag=notice-buttons] .cky-btn-accept',
             hamburgerBtn: '.menu-button',
             elfieLogo: '.app-icon-holder img',
             copyRightLabel: '.text-block',
@@ -47,6 +51,10 @@ export class ElfieHomeScreen extends ElfieScreen {
 
     /* ============ Methods =============== */
 
+    async acceptCookies(){
+        await this.waitAndClick((await this.getHomeScreenElements()).acceptCookiesBtn);
+    }
+
     async openMenu(){
         await this.waitAndClick((await this.getHomeScreenElements()).hamburgerBtn);
     }
@@ -55,6 +63,15 @@ export class ElfieHomeScreen extends ElfieScreen {
         await this.waitAndClick((await this.getMenuElements()).closeBtn);
     }
 
+    async getCopyRightContent() {
+        const url = await driver.getUrl();
+        const urlIncludeArray = url.split('.');
+        if (urlIncludeArray.at(0)?.includes('vi')){
+            return copyRight.vietnamese;
+        }
+        return copyRight.english;
+
+    }
     /*==================Verification==============*/
 
     async verifyCloseButtonDisplay(){
@@ -68,6 +85,6 @@ export class ElfieHomeScreen extends ElfieScreen {
     async verifyBottomCopyRightContent(){
         const copyRightElement = (await this.getHomeScreenElements()).copyRightLabel;
         this.scrollToElement(copyRightElement);
-        this.verifyTextContent(copyRightElement, 'Bản quyền © 2024 Elfie Pte. Ltd.');
+        this.verifyTextContent(copyRightElement, await this.getCopyRightContent());
     }
 }
